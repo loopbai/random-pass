@@ -1,47 +1,86 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"math/rand"
+	"os"
 	"strings"
 	"time"
 )
 
-func Shuffle(slice []string) []string {
-	r := rand.New(rand.NewSource(time.Now().Unix()))
-	ret := make([]string, len(slice))
-	n := len(slice)
-	for i := 0; i < n; i++ {
-		randIndex := r.Intn(len(slice))
-		ret[i] = slice[randIndex]
-		slice = append(slice[:randIndex], slice[randIndex+1:]...)
+var (
+	w    int
+	n    int
+	v, V bool
+)
+
+func init() {
+
+	flag.IntVar(&w, "w", 12, "Word count")
+	flag.IntVar(&n, "n", 1, "Number of groups")
+
+	flag.BoolVar(&v, "v", false, "Show version then exit")
+	flag.BoolVar(&V, "V", false, "Show version and configure options then exit")
+
+	flag.Parse()
+
+	if v {
+		fmt.Println("Version 1.0.0")
+		os.Exit(0)
 	}
-	return ret
+	if V {
+		fmt.Println("Version 1.0.0 ...")
+		os.Exit(0)
+	}
 }
 
 func main() {
-	number := []string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}
+	//	number := []string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}
+	//	capitalLetter := []string{
+	//		"A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
+	//		"K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
+	//		"U", "V", "W", "X", "Y", "Z"}
+	//	lowercaseLetter := []string{
+	//		"a", "b", "c", "d", "e", "f", "g", "h", "i", "j",
+	//		"k", "l", "m", "m", "o", "p", "q", "r", "s", "t",
+	//		"u", "v", "w", "x", "y", "z"}
+	//	symbol := []string{"!", "@", "#", "$", "%", "^", "&", "*"}
+
+	number := []string{"2", "3", "4", "5", "6", "7", "8", "9"}
 	capitalLetter := []string{
 		"A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
-		"K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
+		"K", "L", "M", "N", "P", "Q", "R", "S", "T",
 		"U", "V", "W", "X", "Y", "Z"}
 	lowercaseLetter := []string{
-		"a", "b", "c", "d", "e", "f", "g", "h", "i", "j",
-		"k", "l", "m", "m", "o", "p", "q", "r", "s", "t",
+		"a", "b", "c", "d", "e", "f", "g", "h", "j",
+		"k", "l", "m", "m", "p", "q", "r", "s", "t",
 		"u", "v", "w", "x", "y", "z"}
-	symbol := []string{"!", "@", "#", "$", "%", "^", "&", "*"}
+	symbol := []string{"@", "#", "$", "%", "^", "&", "*"}
 
 	combine := []string{}
 	combine = append(combine, number...)
 	combine = append(combine, capitalLetter...)
 	combine = append(combine, lowercaseLetter...)
 	combine = append(combine, symbol...)
-	fmt.Println(combine)
+	//fmt.Println(combine)
 
-	combine = Shuffle(combine)
-	fmt.Println(combine)
+	for i := 0; i < n; i++ {
+		combine = Shuffle(combine, w)
+		//fmt.Println(combine)
+		result := strings.Join(combine, "")
+		fmt.Println(result)
+	}
+}
 
-	result := strings.Join(combine, "")
-	fmt.Println(result)
-
+func Shuffle(slice []string, word int) []string {
+	r := rand.New(rand.NewSource(time.Now().Unix()))
+	ret := make([]string, word)
+	n := word
+	for i := 0; i < n; i++ {
+		randIndex := r.Intn(len(slice))
+		ret[i] = slice[randIndex]
+		slice = append(slice[:randIndex], slice[randIndex+1:]...)
+	}
+	return ret
 }
