@@ -13,12 +13,15 @@ var (
 	w    int
 	n    int
 	v, V bool
+	c    string
 )
 
 func init() {
 
-	flag.IntVar(&w, "w", 12, "Word count")
-	flag.IntVar(&n, "n", 1, "Number of groups")
+	flag.IntVar(&w, "w", 12, "Set `word` count")
+	flag.IntVar(&n, "n", 1, "Set `number` of groups")
+
+	flag.StringVar(&c, "c", "B", "Set words `composition` (A: all, B: a1!, C:a1)")
 
 	flag.BoolVar(&v, "v", false, "Show version then exit")
 	flag.BoolVar(&V, "V", false, "Show version and configure options then exit")
@@ -59,10 +62,23 @@ func main() {
 	symbol := []string{"@", "#", "$", "%", "^", "&", "*"}
 
 	combine := []string{}
-	combine = append(combine, number...)
-	combine = append(combine, capitalLetter...)
-	combine = append(combine, lowercaseLetter...)
-	combine = append(combine, symbol...)
+	switch {
+	case c == "A":
+		combine = append(combine, number...)
+		combine = append(combine, capitalLetter...)
+		combine = append(combine, lowercaseLetter...)
+		combine = append(combine, symbol...)
+	case c == "B":
+		combine = append(combine, number...)
+		combine = append(combine, lowercaseLetter...)
+		combine = append(combine, symbol...)
+	case c == "C":
+		combine = append(combine, number...)
+		combine = append(combine, lowercaseLetter...)
+	default:
+		fmt.Println("Not in case")
+		os.Exit(0)
+	}
 	//fmt.Println(combine)
 
 	for i := 0; i < n; i++ {
