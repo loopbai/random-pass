@@ -19,7 +19,7 @@ var (
 func init() {
 
 	flag.IntVar(&w, "w", 12, "Set `word` count")
-	flag.IntVar(&n, "n", 1, "Set `number` of groups")
+	flag.IntVar(&n, "n", 3, "Set `number` of groups")
 
 	flag.StringVar(&c, "c", "B", "Set words `composition` (A: all, B: a1!, C:a1)")
 
